@@ -27,7 +27,7 @@ io.on('connection', (socket) => {
     TestMessage.findAll({
         where: {},
     }).then(function (messages) {
-        socket.broadcast.emit('message', {
+        socket.emit('message', {
             messages
         });
     });
