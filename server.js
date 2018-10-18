@@ -7,6 +7,7 @@ const server = require('http').createServer(app);
 const db = require("./models");
 const io = require('socket.io')(server);
 const PORT = 8080;
+const TestMessage = db.sequelize.import('./models/message.js');
 
 // Set up app to use body parser for json encoding on POST
 app.use(express.urlencoded({ extended: true }));
@@ -23,31 +24,25 @@ app.use(function (req, res, next) {
 io.on('connection', (socket) => {
 
     // on connection get all messages
-    app.get("/", function (req, res) {
-        db.Testmessage.findAll({
-            where: query,
-        }).then(function (messages) {
-            socket.broadcast.emit('message', {
-                messages
-            });
+    TestMessage.findAll({
+        where: {},
+    }).then(function (messages) {
+        socket.broadcast.emit('message', {
+            messages
         });
     });
-    
+
     // when new message is created
     socket.on('message', function (data) {
-        // Store the data in the database.
-        app.post("/", function (req, res) {
-            db.Testmessage.create({
-                Author: data.Author,
-                Recipient: data.Recipient,
-                Content: data.Content
-            }).then(function (message) {
-                // const newMessage = message.json()
-                socket.broadcast.emit('message', {
-                    message
-                });
+        TestMessage.create({
+            Author: data.Author,
+            Recipient: data.Recipient,
+            Content: data.Content
+        }).then(function (data) {
+            socket.emit('message', {
+                data
             });
-        });
+        })
     });
 });
 
