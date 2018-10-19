@@ -43,7 +43,8 @@ db.sequelize.sync().then(function () {
                     Author: data.Author,
                     Recipient: data.Recipient,
                     Content: data.Content,
-                    MessageType: data.MessageType
+                    MessageType: data.MessageType,
+                    Read: data.Read
                 }).then(function (data) {
                     socket.emit('message', {
                         data
