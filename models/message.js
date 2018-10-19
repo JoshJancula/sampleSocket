@@ -29,6 +29,11 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.STRING,
             unique: false,
             allowNull: false,
+        },
+        Read: {
+            type: DataTypes.BOOLEAN,
+            unique: false,
+            allowNull: false,
         }
         
     });

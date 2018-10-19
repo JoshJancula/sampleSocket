@@ -21,7 +21,6 @@ app.use(function (req, res, next) {
     next();
 });
 
-
 db.sequelize.sync().then(function () {
     server.listen(PORT, function () {
         console.log('---------------------------------------------------');
