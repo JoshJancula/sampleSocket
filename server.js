@@ -36,6 +36,21 @@ db.sequelize.sync().then(function () {
                     messages
                 });
             });
+
+            socket.on('read', function(data) {
+                TestMessage.update({ 
+                    Read: data.Read
+                  }, { 
+                    where: {
+                      id: data.id
+                    }
+                  }).then(function(x) {
+                    console.log('message status updated');
+                  })
+                  .catch(function(err) {
+                    res.json(err);
+                  });
+            });
         
             // when new message is created
             socket.on('message', function (data) {
