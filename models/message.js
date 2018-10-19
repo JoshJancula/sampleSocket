@@ -24,7 +24,13 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.DATE,
             unique: false,
             allowNull: false,
+        },
+        MessageType: {
+            type: DataTypes.STRING,
+            unique: false,
+            allowNull: false,
         }
+        
     });
 
     return TestMessage;
