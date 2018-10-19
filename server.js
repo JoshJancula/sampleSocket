@@ -21,35 +21,58 @@ app.use(function (req, res, next) {
     next();
 });
 
-io.on('connection', (socket) => {
+// io.on('connection', (socket) => {
+//     // on connection get all messages
+//     TestMessage.findAll({
+//         where: {},
+//     }).then(function (messages) {
+//         socket.emit('message', {
+//             messages
+//         });
+//     });
 
-    // on connection get all messages
-    TestMessage.findAll({
-        where: {},
-    }).then(function (messages) {
-        socket.emit('message', {
-            messages
-        });
-    });
-
-    // when new message is created
-    socket.on('message', function (data) {
-        TestMessage.create({
-            Author: data.Author,
-            Recipient: data.Recipient,
-            Content: data.Content
-        }).then(function (data) {
-            socket.emit('message', {
-                data
-            });
-        })
-    });
-});
+//     // when new message is created
+//     socket.on('message', function (data) {
+//         TestMessage.create({
+//             Author: data.Author,
+//             Recipient: data.Recipient,
+//             Content: data.Content
+//         }).then(function (data) {
+//             socket.emit('message', {
+//                 data
+//             });
+//         })
+//     });
+// });
 
 db.sequelize.sync().then(function () {
     server.listen(PORT, function () {
         console.log('---------------------------------------------------');
         console.log("App listening on PORT " + PORT);
         console.log('---------------------------------------------------');
+
+        io.on('connection', (socket) => {
+            // on connection get all messages
+            TestMessage.findAll({
+                where: {},
+            }).then(function (messages) {
+                socket.emit('message', {
+                    messages
+                });
+            });
+        
+            // when new message is created
+            socket.on('message', function (data) {
+                TestMessage.create({
+                    Author: data.Author,
+                    Recipient: data.Recipient,
+                    Content: data.Content
+                }).then(function (data) {
+                    socket.emit('message', {
+                        data
+                    });
+                })
+            });
+        });
     });
 });
